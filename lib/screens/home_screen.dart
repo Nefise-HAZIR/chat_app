@@ -48,31 +48,29 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.hasError) {
             return const Text("error");
           }
-          if ((snapshot.data?.docs ?? []).isEmpty) {
-            return const Text("empty");
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text("Loading");
+          if ((snapshot.data?.docs ?? []).isEmpty || snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator(),);
           }
           //success
+          final maplist = snapshot.data!.docs
+              .map((e) => e.data() as Map<String, dynamic>)
+              .toList();
+
+          final item =
+              maplist.firstWhere((i) => i['email'] == _auth.currentUser?.email);
+          maplist.remove(item);
+
+          final classList = maplist.map((e) => UserClass.fromMap(e));
+          
           return ListView(
-            children: snapshot.data!.docs
+            children:classList
                 .map<Widget>((doc) => _buildUserListItem(doc))
                 .toList(),
           );
         });
   }
 
-  Widget _buildUserListItem(DocumentSnapshot document) {
-    Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-    UserClass user = UserClass.fromMap(data);
-
-    String? currentUserEmail = _auth.currentUser?.email;
-    if (currentUserEmail != null && user.email == currentUserEmail) {
-      // kullanıcının maili listeden çıktı 
-      data.remove('email');
-      return Container(); // Burada boş bir Container döndürerek ListTile oluşturmayı engelliyoruz burda null hatası almamak için yapıldı
-    }
+  Widget _buildUserListItem(UserClass user) {
     return ListTile(
       title: Container(
         padding: const EdgeInsets.all(20),
@@ -82,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
             color: const Color(0xFF7C81AD)),
         child: Center(
             child: Text(
-          user.email, 
+          user.email,
           style: const TextStyle(color: Colors.white, fontSize: 18),
         )),
       ),

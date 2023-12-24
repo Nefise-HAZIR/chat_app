@@ -24,13 +24,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void signIn() async {
     try {
-      String res=await AuthService().signInUser(
+      String res = await AuthService().signInUser(
           email: _emailController.text, password: _passwordController.text);
-      if (res=="success") {
-         Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const HomeScreen()));
-      }
-     
+      if (res == "success") {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => const HomeScreen()));
+      } 
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -47,15 +46,18 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: MediaQuery.of(context).size.width>700?const EdgeInsets.only(top: 20) :
-                EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.2),
+            padding: MediaQuery.of(context).size.width > 700
+                ? const EdgeInsets.only(top: 20)
+                : EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.2),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.chat,
                   color: Colors.white,
-                  size:MediaQuery.of(context).size.width>700?MediaQuery.of(context).size.width*0.2 :MediaQuery.of(context).size.width * 0.6,
+                  size: MediaQuery.of(context).size.width > 700
+                      ? MediaQuery.of(context).size.width * 0.2
+                      : MediaQuery.of(context).size.width * 0.6,
                 ),
                 MyTextField(
                   hintText: 'Please enter your email address',
@@ -71,8 +73,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   text: 'Login',
                 ),
                 Padding(
-                  padding:MediaQuery.of(context).size.width>700? const EdgeInsets.symmetric(vertical: 20): EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.width * 0.2),
+                  padding: MediaQuery.of(context).size.width > 700
+                      ? const EdgeInsets.symmetric(vertical: 20)
+                      : EdgeInsets.symmetric(
+                          vertical: MediaQuery.of(context).size.width * 0.2),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

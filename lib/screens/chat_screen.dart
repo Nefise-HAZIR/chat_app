@@ -58,12 +58,10 @@ class _ChatScreenState extends State<ChatScreen> {
           if (snapshot.hasError) {
             return Text("Error${snapshot.error}");
           }
-          if ((snapshot.data?.docs ?? []).isEmpty) {
-            return const Text("empty");
+          if ((snapshot.data?.docs ?? []).isEmpty || snapshot.connectionState == ConnectionState.waiting ) {
+            return const Center(child: CircularProgressIndicator(),);
           }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Loading...');
-          }
+         
           //success
           for (var i = 0; i < snapshot.data!.docs.length; i++) {
             var myQueryData = snapshot.data!.docs[i];
